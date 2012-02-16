@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, SounderActivity!</string>
     <string name="app_name">Sounder</string>
+    <string name="sounder">Sounder</string>
+    
+    <!--  Player -->
+    <string name="artiste">Artiste</string>
+    <string name="album">Album</string>
+    <string name="track">Track</string>
+    <string name="current">Current</string>
+    <string name="remaining">Remaining</string>
 
 </resources>
