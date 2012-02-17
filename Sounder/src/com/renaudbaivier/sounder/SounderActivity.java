@@ -3,18 +3,29 @@ package com.renaudbaivier.sounder;
 import java.io.File;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.util.Log;
 
 public class SounderActivity extends Activity {
     /** Called when the activity is first created. */
+	
+	
+	
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.player);
-        
+        setContentView(R.layout.main);
+       
         listeRepertoire(new File("/mnt/sdcard"));
+    }
+    
+    // Pour DEV
+    public void player(View v){
+    	Intent t = new Intent(SounderActivity.this, PlayerActivity.class);
+    	startActivity(t);
     }
     
 
