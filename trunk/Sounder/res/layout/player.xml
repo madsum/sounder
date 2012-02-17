@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/pause"
             android:onClick="pause"
+            android:layout_marginLeft="-32.5dp"
             android:visibility="invisible" />
 
         <ImageView
