@@ -42,10 +42,10 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/artiste"
+        android:id="@+id/artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/artiste" />
+        android:text="@string/artist" />
 
     <TextView
         android:id="@+id/album"

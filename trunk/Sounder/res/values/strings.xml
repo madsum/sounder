@@ -8,7 +8,7 @@
     <string name="player">Player</string>
     
     <!--  Player -->
-    <string name="artiste">Artiste</string>
+    <string name="artist">Artist</string>
     <string name="album">Album</string>
     <string name="track">Track</string>
     <string name="current">Current</string>

@@ -10,8 +10,14 @@ import android.widget.TextView;
 public class PlayerActivity extends Activity {
     /** Called when the activity is first created. */
 	
-	// Lecture MP3
+	// Variables
 	MediaPlayer mediaPlayer;
+	TextView current;
+	ImageView play;
+	ImageView pause;
+	TextView artist;
+	TextView album;
+	TextView track;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,7 +26,26 @@ public class PlayerActivity extends Activity {
         
         // Récupération du fichier
         // Ficher et chemin de TEST
-        mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.mp3); 
+        // Mise en place
+        mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.mp3);
+        
+        // Variables populate
+        play = (ImageView) findViewById(R.id.play);
+        pause = (ImageView) findViewById(R.id.pause);
+        artist = (TextView) findViewById(R.id.artist);
+        album = (TextView) findViewById(R.id.album);
+        track = (TextView) findViewById(R.id.track);
+        current = (TextView) findViewById(R.id.current);
+        
+        // Artiste
+
+        
+        // Album
+        
+        // Piste
+        
+        // Current du MP3
+        current.setText(String.valueOf(mediaPlayer.getCurrentPosition()));
     }
     
     // Appui sur touche back
@@ -31,24 +56,41 @@ public class PlayerActivity extends Activity {
     
     // Lecture du MP3
     public void play(View v) {
-    	mediaPlayer.start();
-    	ImageView pause = (ImageView) findViewById(R.id.pause);
-    	pause.setVisibility(View.VISIBLE);
-    	ImageView play = (ImageView) findViewById(R.id.play);
-    	play.setVisibility(View.INVISIBLE);
+    	if (!mediaPlayer.isPlaying())
+    	{
+	    	mediaPlayer.start();
+	    	pause.setVisibility(View.VISIBLE);
+	    	play.setVisibility(View.INVISIBLE);
+    	}
     }
     
     // Pause du MP3
     public void pause(View v) {
-    	mediaPlayer.pause();
-    	ImageView pause = (ImageView) findViewById(R.id.pause);
-    	pause.setVisibility(View.INVISIBLE);
-    	ImageView play = (ImageView) findViewById(R.id.play);
-    	play.setVisibility(View.VISIBLE);
+    	if (mediaPlayer.isPlaying()) {
+    		mediaPlayer.pause();    	
+	    	pause.setVisibility(View.INVISIBLE);
+	    	play.setVisibility(View.VISIBLE);
+    	}
     }
     
     // Stop du MP3
     public void stop(View v) {
-    	mediaPlayer.stop();
+    	//mediaPlayer.stop();
     }
+    
+    // REW du MP3
+    public void rew(View v) {
+    	
+    }
+    
+    // FF (non Laurent ce nest pas FonkyFamily) du MP3
+    public void ff(View v) {
+    	
+    }
+    
+    public void run() {
+    	
+    }
+    
+    // Pour plus tard : wifiLock.release();
 }
