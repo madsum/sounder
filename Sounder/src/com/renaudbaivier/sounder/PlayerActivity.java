@@ -2,6 +2,7 @@ package com.renaudbaivier.sounder;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,17 +19,15 @@ public class PlayerActivity extends Activity {
 	TextView artist;
 	TextView album;
 	TextView track;
+	String path;
+	String file;
+	Uri pathfile;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player);
-        
-        // Récupération du fichier
-        // Ficher et chemin de TEST
-        // Mise en place
-        mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.mp3);
-        
+
         // Variables populate
         play = (ImageView) findViewById(R.id.play);
         pause = (ImageView) findViewById(R.id.pause);
@@ -37,6 +36,15 @@ public class PlayerActivity extends Activity {
         track = (TextView) findViewById(R.id.track);
         current = (TextView) findViewById(R.id.current);
         
+        // Uri
+        // Peut Etre DataSource plus tard
+        path = "sdcard";
+        file = "mp3.mp3";
+        pathfile = Uri.parse("file:///"+path+"/"+file);
+		
+        // Lecteur
+		mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);
+        
         // Artiste
 
         
@@ -44,8 +52,9 @@ public class PlayerActivity extends Activity {
         
         // Piste
         
+        
         // Current du MP3
-        current.setText(String.valueOf(mediaPlayer.getCurrentPosition()));
+        //current.setText(String.valueOf(mediaPlayer.getCurrentPosition()));
     }
     
     // Appui sur touche back
