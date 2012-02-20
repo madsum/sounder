@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Audio;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,12 +37,15 @@ public class PlayerActivity extends Activity {
         album = (TextView) findViewById(R.id.album);
         track = (TextView) findViewById(R.id.track);
         current = (TextView) findViewById(R.id.current);
-        
+               
         // Uri
         // Peut Etre DataSource plus tard
         path = "sdcard";
         file = "mp3.mp3";
-        pathfile = Uri.parse("file:///"+path+"/"+file);
+        //pathfile = Uri.parse("file:///"+path+"/"+file);
+        String a ="/mnt/sdcard/musique/Earth Wind and Fire - September.mp3";
+        pathfile = Uri.parse("file:///"+a);
+        
 		
         // Lecteur
 		mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);
@@ -64,7 +69,8 @@ public class PlayerActivity extends Activity {
     }
     
     // Lecture du MP3
-    public void play(View v) {
+    public void play(View v) 
+    {
     	if (!mediaPlayer.isPlaying())
     	{
 	    	mediaPlayer.start();
