@@ -2,51 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ffffff" >
+    android:background="#ffffff"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" >
 
         <ImageView
             android:id="@+id/rew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/rew"
-            android:onClick="rew" />
+            android:onClick="rew"
+            android:src="@drawable/rew" />
 
         <ImageView
             android:id="@+id/play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="play"
             android:src="@drawable/play"
-            android:onClick="play" />
-        
+            android:layout_marginLeft="10dp" />
+
         <ImageView
             android:id="@+id/pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/pause"
-            android:onClick="pause"
             android:layout_marginLeft="-32.5dp"
+            android:onClick="pause"
+            android:src="@drawable/pause"
             android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/ff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="ff"
             android:src="@drawable/ff"
-			android:onClick="ff" />
-
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/artist" />
+        android:text="@string/artist"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/album"
@@ -56,15 +59,17 @@
 
     <ImageView
         android:id="@+id/cover"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/cover" />
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/cover"
+        android:layout_marginTop="10dp" />
 
     <ProgressBar
         android:id="@+id/timeprogress"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -82,13 +87,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/remaining" />
-
     </LinearLayout>
 
     <TextView
         android:id="@+id/track"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/track" />
+        android:text="@string/track"
+        android:layout_marginTop="10dp" />
 
 </LinearLayout>
