@@ -1,6 +1,7 @@
 package com.renaudbaivier.sounder;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +12,8 @@ import android.util.Log;
 public class SounderActivity extends Activity {
     /** Called when the activity is first created. */
 	
-	
+	//Liste contenant les chemins des fichiers mp3 de la sdcard
+	private ArrayList<String> filePath = new ArrayList<String>();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -19,16 +21,31 @@ public class SounderActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
        
-        listeRepertoire(new File("/mnt/sdcard"));
+        listeRepertoire(new File("/mnt/sdcard"));        
+        
     }
     
-    // Pour DEV
+    public void listerMusique(View v)
+    {
+    	Intent t = new Intent(SounderActivity.this, AllListActivity.class);
+    	startActivity(t);
+    	
+    }
+   
+
+	// Pour DEV
     public void player(View v){
     	Intent t = new Intent(SounderActivity.this, PlayerActivity.class);
+    	t.putExtra("liste", this.filePath);
     	startActivity(t);
     }
     
-
+	/**
+	 * Cette fonction permet de recuperer les fichiers mp3
+	 * contenus dans la sdcard
+	 * 
+	 * @param repertoire
+	 */
     public void listeRepertoire ( File repertoire ) {
             
             if ( repertoire.isDirectory ( ) ) {
@@ -41,6 +58,7 @@ public class SounderActivity extends Activity {
     	                		Log.d("AbsolutePath",list[i].getAbsolutePath());
     	                		Log.d("Path",list[i].getPath());
     	                		Log.d("name",list[i].getName());
+    	                		this.filePath.add(list[i].getPath());
     	                	}
     	                        // Appel récursif sur les sous-répertoires
     	                        listeRepertoire( list[i]);
