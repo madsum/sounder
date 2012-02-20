@@ -1,11 +1,10 @@
 package com.renaudbaivier.sounder;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Audio;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,29 +36,35 @@ public class PlayerActivity extends Activity {
         album = (TextView) findViewById(R.id.album);
         track = (TextView) findViewById(R.id.track);
         current = (TextView) findViewById(R.id.current);
-               
+        
         // Uri
         // Peut Etre DataSource plus tard
         path = "sdcard";
         file = "mp3.mp3";
-        //pathfile = Uri.parse("file:///"+path+"/"+file);
-        String a ="/mnt/sdcard/musique/Earth Wind and Fire - September.mp3";
-        pathfile = Uri.parse("file:///"+a);
-        
+        pathfile = Uri.parse("file:///"+path+"/"+file);
 		
         // Lecteur
 		mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);
         
         // Artiste
-
         
+		
         // Album
         
+		
         // Piste
-        
-        
+		
+		
         // Current du MP3
         //current.setText(String.valueOf(mediaPlayer.getCurrentPosition()));
+    }
+    
+    protected void onResume() {
+        super.onResume();
+        if (mediaPlayer.isPlaying()) { 	
+	    	pause.setVisibility(View.VISIBLE);
+	    	play.setVisibility(View.INVISIBLE);
+    	}
     }
     
     // Appui sur touche back
@@ -69,8 +74,7 @@ public class PlayerActivity extends Activity {
     }
     
     // Lecture du MP3
-    public void play(View v) 
-    {
+    public void play(View v) {
     	if (!mediaPlayer.isPlaying())
     	{
 	    	mediaPlayer.start();
@@ -90,12 +94,14 @@ public class PlayerActivity extends Activity {
     
     // Stop du MP3
     public void stop(View v) {
-    	//mediaPlayer.stop();
+    	if (mediaPlayer.isPlaying()) {
+    		mediaPlayer.stop();    	
+    	}
     }
     
     // REW du MP3
     public void rew(View v) {
-    	
+
     }
     
     // FF (non Laurent ce nest pas FonkyFamily) du MP3
