@@ -97,6 +97,8 @@ public class PlayerActivity extends MenuActivity {
     }
     
     // FF (non Laurent ce nest pas FonkyFamily) du MP3
+    // appui court = piste suivante
+    // appui long = avance rapide
     public void ff(View v) {
     	
     }
