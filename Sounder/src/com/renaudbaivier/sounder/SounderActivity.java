@@ -40,6 +40,11 @@ public class SounderActivity extends Activity {
     	startActivity(t);
     }
     
+    public void ouvreOnglet(View v){
+    	Intent t = new Intent(SounderActivity.this, TabsActivity.class);
+    	startActivity(t);
+    }
+    
 	/**
 	 * Cette fonction permet de recuperer les fichiers mp3
 	 * contenus dans la sdcard
