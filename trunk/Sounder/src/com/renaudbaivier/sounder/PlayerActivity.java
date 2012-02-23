@@ -1,7 +1,5 @@
 package com.renaudbaivier.sounder;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PlayerActivity extends Activity {
+public class PlayerActivity extends MenuActivity {
     /** Called when the activity is first created. */
 	
 	// Variables
@@ -65,12 +63,6 @@ public class PlayerActivity extends Activity {
 	    	pause.setVisibility(View.VISIBLE);
 	    	play.setVisibility(View.INVISIBLE);
     	}
-    }
-    
-    // Appui sur touche back
-    // A mettre dans TOUTE les Activity !
-    public void onBackPressed() {
-    	
     }
     
     // Lecture du MP3
