@@ -5,19 +5,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class PlayerActivity extends MenuActivity {
+public class PlayerActivity extends MenuActivity implements Runnable {
     /** Called when the activity is first created. */
 	
 	// Variables
 	MediaPlayer mediaPlayer;
 	TextView current;
+	TextView remaining;
 	ImageView play;
 	ImageView pause;
 	TextView artist;
 	TextView album;
 	TextView track;
+	ProgressBar timeprogress;
 	String path;
 	String file;
 	Uri pathfile;
@@ -34,6 +37,8 @@ public class PlayerActivity extends MenuActivity {
         album = (TextView) findViewById(R.id.album);
         track = (TextView) findViewById(R.id.track);
         current = (TextView) findViewById(R.id.current);
+        remaining = (TextView) findViewById(R.id.remaining);
+        timeprogress= (ProgressBar) findViewById(R.id.timeprogress);
         
         // Uri
         // Peut Etre DataSource plus tard
@@ -72,6 +77,10 @@ public class PlayerActivity extends MenuActivity {
 	    	mediaPlayer.start();
 	    	pause.setVisibility(View.VISIBLE);
 	    	play.setVisibility(View.INVISIBLE);
+	    	//mediaPlayer.setOnCompletionListener(listener)
+	    	timeprogress.setProgress(0);
+	    	timeprogress.setMax(mediaPlayer.getDuration());
+	    	new Thread(this).start();
     	}
     }
     
@@ -103,8 +112,22 @@ public class PlayerActivity extends MenuActivity {
     	
     }
     
+    @Override
     public void run() {
-    	
+    	int currentPosition= 0;
+        int total = mediaPlayer.getDuration();
+        while (mediaPlayer!=null && currentPosition<total) {
+        	try {
+                Thread.sleep(1000);
+                currentPosition= mediaPlayer.getCurrentPosition();
+                //remaining.setText(currentPosition);
+            } catch (InterruptedException e) {
+                return;
+            } catch (Exception e) {
+                return;
+            }            
+            timeprogress.setProgress(currentPosition);	
+        }
     }
     
     // Pour plus tard : wifiLock.release();
