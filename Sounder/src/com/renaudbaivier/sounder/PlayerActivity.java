@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PlayerActivity extends MenuActivity implements Runnable {
     /** Called when the activity is first created. */
@@ -24,6 +25,8 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	String path;
 	String file;
 	Uri pathfile;
+	int currentPosition;
+	int total;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,27 +50,15 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         pathfile = Uri.parse("file:///"+path+"/"+file);
 		
         // Lecteur
-		mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);
-        
-        // Artiste
-        
-		
-        // Album
-        
-		
-        // Piste
-		
-		
-        // Current du MP3
-        //current.setText(String.valueOf(mediaPlayer.getCurrentPosition()));
+        mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);		
     }
     
-    protected void onResume() {
-        super.onResume();
-        if (mediaPlayer.isPlaying()) { 	
-	    	pause.setVisibility(View.VISIBLE);
-	    	play.setVisibility(View.INVISIBLE);
-    	}
+    // Temporaire evite de devoir aller shooter lappli dans les settings !
+    // Travailler sur le onResume qui merde pour linstant
+    // Ne pas oublier de supprimer ce type de commentaire aussi...
+    public void onStop() {
+    	super.onStop();
+    	mediaPlayer.stop();
     }
     
     // Lecture du MP3
@@ -78,7 +69,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	    	pause.setVisibility(View.VISIBLE);
 	    	play.setVisibility(View.INVISIBLE);
 	    	//mediaPlayer.setOnCompletionListener(listener)
-	    	timeprogress.setProgress(0);
+	    	//timeprogress.setProgress(0);
 	    	timeprogress.setMax(mediaPlayer.getDuration());
 	    	new Thread(this).start();
     	}
@@ -109,24 +100,23 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     // appui court = piste suivante
     // appui long = avance rapide
     public void ff(View v) {
-    	
+
     }
     
     @Override
     public void run() {
-    	int currentPosition= 0;
-        int total = mediaPlayer.getDuration();
+    	currentPosition = 0;
+        total = mediaPlayer.getDuration();
         while (mediaPlayer!=null && currentPosition<total) {
         	try {
                 Thread.sleep(1000);
-                currentPosition= mediaPlayer.getCurrentPosition();
-                //remaining.setText(currentPosition);
+                currentPosition = mediaPlayer.getCurrentPosition();
             } catch (InterruptedException e) {
                 return;
             } catch (Exception e) {
                 return;
             }            
-            timeprogress.setProgress(currentPosition);	
+            timeprogress.setProgress(currentPosition);
         }
     }
     
