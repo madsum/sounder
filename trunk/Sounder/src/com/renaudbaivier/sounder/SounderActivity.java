@@ -3,13 +3,12 @@ package com.renaudbaivier.sounder;
 import java.io.File;
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
 
-public class SounderActivity extends Activity {
+public class SounderActivity extends MenuActivity {
     /** Called when the activity is first created. */
 	
 	//Liste contenant les chemins des fichiers mp3 de la sdcard
