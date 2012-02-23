@@ -7,6 +7,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class MenuActivity extends Activity {
+	
+	Intent tPlayer;
     
 	public boolean onCreateOptionsMenu(Menu menu) {
     	 
@@ -19,17 +21,19 @@ public class MenuActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
          switch (item.getItemId()) {
          	case R.id.player_m:
-         		Intent t = new Intent(MenuActivity.this, PlayerActivity.class);
-            	startActivity(t);
-            return true;
+         		tPlayer = new Intent(MenuActivity.this, PlayerActivity.class);
+                startActivity(tPlayer);
+                return true;
             case R.id.exit_m:
                 finish();
-               return true;
+                return true;
          }
          return false;
     }
     
     public void onBackPressed() {
-    	super.onBackPressed();
+    	// Permet plusieurs Activity du player
+    	// Trouver une SOLUTION
+    	//super.onBackPressed();
     }
 }
