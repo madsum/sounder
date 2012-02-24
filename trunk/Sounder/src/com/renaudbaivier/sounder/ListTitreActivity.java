@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ListTitreActivity extends Activity 
@@ -37,26 +38,32 @@ public class ListTitreActivity extends Activity
             				  MediaStore.Audio.Media.DATA,
             				  MediaStore.Audio.Media.DISPLAY_NAME,
             				  MediaStore.Audio.Media.ALBUM,
+            				  MediaStore.Audio.Media.TITLE,
             				  MediaStore.Video.Media.SIZE };
             musiccursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,proj, null, null, null);
             count = musiccursor.getCount();
             musiclist = (ListView) findViewById(R.id.MusicTitreList);
             musiclist.setAdapter(new MusicAdapter(getApplicationContext()));
-            // musiclist.setOnItemClickListener(musicgridlistener);
+            musiclist.setOnItemClickListener(musicgridlistener);
             
       }
 
       /**
        * LA ON TRANSMET LE FILENAME A NOTRE AMI ROUKY
-       *
+       */
       private OnItemClickListener musicgridlistener = new OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position,
 long id) {
             	
-            	
+            	  System.gc();
+                  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
+                  musiccursor.moveToPosition(position);
+                  String artist = musiccursor.getString(music_column_index);
+          	  
+          	  Toast.makeText(getApplicationContext(), "Vous avez cliqué sur le titre: "+artist, Toast.LENGTH_SHORT).show();
                 
             }
-      };*/
+      };
 
       public class MusicAdapter extends BaseAdapter {
             private Context mContext;
@@ -83,25 +90,10 @@ long id) {
                   String id = null;
                   if (convertView == null) {
                         music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
-                	   // music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
                         musiccursor.moveToPosition(position);
                         id = musiccursor.getString(music_column_index);
-                      //  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE);
                         musiccursor.moveToPosition(position);
-                        //id += " Size):" + musiccursor.getString(music_column_index);
-                       // id += " Album):" +musiccursor
-                       // .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
                         tv.setText(id);
-                        //ici faire fonction qui permet denvoyer nom de musique avec le onclick
-                                                 
-                      //  tv.setOnClickListener(new OnClickListener() {
-							
-//							@Override
-//							public void onClick(View v) {
-//								// TODO Auto-generated method stub
-//								
-//							}
-//						})
                         
                        
                   } else

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ListArtistActivity extends Activity {
@@ -43,30 +44,20 @@ public class ListArtistActivity extends Activity {
           count = musiccursor.getCount();
           musiclist = (ListView) findViewById(R.id.MusicArtistList);
           musiclist.setAdapter(new MusicAdapter(getApplicationContext()));
-         // musiclist.setOnItemClickListener(musicgridlistener);
+          musiclist.setOnItemClickListener(musicgridlistener);
     }
 
     private OnItemClickListener musicgridlistener = new OnItemClickListener() {
           public void onItemClick(AdapterView parent, View v, int position,
 long id) {
-                System.gc();
-                music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-                musiccursor.moveToPosition(position);
-                String filename = musiccursor.getString(music_column_index);
+        	  System.gc();
+              music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
+              musiccursor.moveToPosition(position);
+              String artist = musiccursor.getString(music_column_index);
+      	  
+      	  Toast.makeText(getApplicationContext(), "Vous avez cliqué sur l'artist: "+artist, Toast.LENGTH_SHORT).show();
 
-                /**
-                 * LA ON TRANSMET LE FILENAME A NOTRE AMI ROUKY
-                 */
-               /* try {
-                      if (mMediaPlayer.isPlaying()) {
-                            mMediaPlayer.reset();
-                      }
-                      mMediaPlayer.setDataSource(filename);
-                      mMediaPlayer.prepare();
-                      mMediaPlayer.start();
-                } catch (Exception e) {
 
-                }*/
           }
     };
 
