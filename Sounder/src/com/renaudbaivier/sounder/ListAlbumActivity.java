@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ListAlbumActivity extends Activity {
@@ -39,26 +40,28 @@ public class ListAlbumActivity extends Activity {
           count = musiccursor.getCount();
           musiclist = (ListView) findViewById(R.id.MusicAlbumList);
           musiclist.setAdapter(new MusicAdapter2(getApplicationContext()));
-          //musiclist.setOnItemClickListener(musicgridlistener);
+          musiclist.setOnItemClickListener(musicgridlistener);
          //mMediaPlayer = new MediaPlayer();
     }
 
       /**
        * LA ON TRANSMET LE FILENAME A NOTRE AMI ROUKY
-       
+       */
     private OnItemClickListener musicgridlistener = new OnItemClickListener() {
           public void onItemClick(AdapterView parent, View v, int position,
 long id) {
                 System.gc();
-                music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+                music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
                 musiccursor.moveToPosition(position);
                 String filename = musiccursor.getString(music_column_index);
+        	  
+        	  Toast.makeText(getApplicationContext(), "Vous avez cliqué sur l'album: "+filename, Toast.LENGTH_SHORT).show();
 
                
            
           }
     };
-    */
+    
 
     public class MusicAdapter2 extends BaseAdapter {
           private Context mContext;
