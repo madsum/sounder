@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,6 +37,7 @@ public class ListArtistActivity extends Activity {
           				  MediaStore.Audio.Media.DATA,
           				  MediaStore.Audio.Media.DISPLAY_NAME,
           				  MediaStore.Audio.Media.ALBUM,
+          				  MediaStore.Audio.Media.ARTIST,
           				  MediaStore.Video.Media.SIZE };
           musiccursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,proj, null, null, null);
           count = musiccursor.getCount();
@@ -92,30 +94,13 @@ long id) {
                 TextView tv = new TextView(mContext.getApplicationContext());
                 String id = null;
                 if (convertView == null) {
-                    //  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
-              	    //  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
-              	    music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
-                      musiccursor.moveToPosition(position);
-                      id = musiccursor.getString(music_column_index);
-                      music_column_index = musiccursor
-.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE);
-                      musiccursor.moveToPosition(position);
-                      //id += " Size):" + musiccursor.getString(music_column_index);
-                      id += " Album):" +musiccursor
-                      .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
-                      tv.setText(id);
-                      //ici faire fonction qui permet denvoyer nom de musique avec le onclick
-                                               
-                    //  tv.setOnClickListener(new OnClickListener() {
-							
-//							@Override
-//							public void onClick(View v) {
-//								// TODO Auto-generated method stub
-//								
-//							}
-//						})
-                      
-                     
+
+                	Log.d("artiste",""+ musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+                	 music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
+                     musiccursor.moveToPosition(position);
+                     id = musiccursor.getString(music_column_index);
+                     musiccursor.moveToPosition(position);
+                     tv.setText(id);  
                 } else
                       tv = (TextView) convertView;
                 return tv;
