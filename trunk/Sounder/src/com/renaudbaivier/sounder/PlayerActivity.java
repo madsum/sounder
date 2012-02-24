@@ -5,9 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PlayerActivity extends MenuActivity implements Runnable {
     /** Called when the activity is first created. */
@@ -21,12 +20,13 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	TextView artist;
 	TextView album;
 	TextView track;
-	ProgressBar timeprogress;
+	SeekBar timeprogress;
 	String path;
 	String file;
 	Uri pathfile;
 	int currentPosition;
 	int total;
+	//private final Handler handler = new Handler();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         track = (TextView) findViewById(R.id.track);
         current = (TextView) findViewById(R.id.current);
         remaining = (TextView) findViewById(R.id.remaining);
-        timeprogress= (ProgressBar) findViewById(R.id.timeprogress);
+        timeprogress= (SeekBar) findViewById(R.id.timeprogress);
         
         // Uri
         // Peut Etre DataSource plus tard
@@ -50,8 +50,39 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         pathfile = Uri.parse("file:///"+path+"/"+file);
 		
         // Lecteur
-        mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);		
+        mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);
+        /*
+        timeprogress.setOnTouchListener(new OnTouchListener() {
+        	@Override public boolean onTouch(View v, MotionEvent event) {
+        		timeprogressChange(v);
+        		return false;
+        	}
+        });*/
     }
+    
+    /*
+    public void startPlayProgressUpdater() {
+    	timeprogress.setProgress(mediaPlayer.getCurrentPosition());
+		if (mediaPlayer.isPlaying()) {
+			Runnable notification = new Runnable() {
+		        public void run() {
+		        	startPlayProgressUpdater();
+				}
+		    };
+		    handler.postDelayed(notification,1000);
+    	} else {
+    		mediaPlayer.pause();
+    		timeprogress.setProgress(0);
+    	}
+    }
+    
+    private void timeprogressChange(View v){
+    	if(mediaPlayer.isPlaying()){
+	    	SeekBar sb = (SeekBar)v;
+			mediaPlayer.seekTo(sb.getProgress());
+		}
+    }
+    */
     
     // Temporaire evite de devoir aller shooter lappli dans les settings !
     // Travailler sur le onResume qui merde pour linstant
@@ -68,8 +99,6 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	    	mediaPlayer.start();
 	    	pause.setVisibility(View.VISIBLE);
 	    	play.setVisibility(View.INVISIBLE);
-	    	//mediaPlayer.setOnCompletionListener(listener)
-	    	//timeprogress.setProgress(0);
 	    	timeprogress.setMax(mediaPlayer.getDuration());
 	    	new Thread(this).start();
     	}
@@ -119,6 +148,4 @@ public class PlayerActivity extends MenuActivity implements Runnable {
             timeprogress.setProgress(currentPosition);
         }
     }
-    
-    // Pour plus tard : wifiLock.release();
 }
