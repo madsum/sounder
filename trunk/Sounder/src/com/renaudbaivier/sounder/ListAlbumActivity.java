@@ -38,8 +38,8 @@ public class ListAlbumActivity extends Activity {
           musiccursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,proj, null, null, null);
           count = musiccursor.getCount();
           musiclist = (ListView) findViewById(R.id.MusicAlbumList);
-         //musiclist.setAdapter(new MusicAdapter2(getApplicationContext()));
-         // musiclist.setOnItemClickListener(musicgridlistener);
+          musiclist.setAdapter(new MusicAdapter2(getApplicationContext()));
+          //musiclist.setOnItemClickListener(musicgridlistener);
          //mMediaPlayer = new MediaPlayer();
     }
 
@@ -88,9 +88,11 @@ long id) {
               	      music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
                       musiccursor.moveToPosition(position);
                       id = musiccursor.getString(music_column_index);
-                      music_column_index = musiccursor
-.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE);
                       musiccursor.moveToPosition(position);
+                      //id += " Size):" + musiccursor.getString(music_column_index);
+                      // id += " Album):" +musiccursor
+                      // .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
+                      tv.setText(id);
 							
 //							@Override
 //							public void onClick(View v) {
