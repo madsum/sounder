@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SeekBar;
 
 public class MenuActivity extends Activity {
 	
@@ -29,11 +30,5 @@ public class MenuActivity extends Activity {
                 return true;
          }
          return false;
-    }
-    
-    public void onBackPressed() {
-    	// Permet plusieurs Activity du player
-    	// Trouver une SOLUTION
-    	//super.onBackPressed();
     }
 }
