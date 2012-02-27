@@ -64,22 +64,56 @@
         android:textColor="#33b5e5"
         android:textSize="25dp" />
 
-    <ImageView
-        android:id="@+id/cover"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp" />
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp" />
+
+        <ImageView
+            android:id="@+id/loop_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/off"
+			android:onClick="loop" />
+
+        <ImageView
+            android:id="@+id/loop_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-55dp"
+            android:layout_marginTop="10dp"
+            android:onClick="loop"
+            android:src="@drawable/on"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/loop_t"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-30dp"
+            android:layout_marginTop="20dp"
+            android:textSize="8dp"
+            android:text="@string/loop" />
+    </LinearLayout>
 
     <SeekBar
         android:id="@+id/timeprogress"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="200dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
-        android:progress="0"
-		android:max="100" />
+        android:layout_marginTop="10dp"
+        android:max="100"
+        android:progress="0" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -100,7 +134,7 @@
             android:layout_height="wrap_content"
             android:text="@string/remaining"
             android:textColor="#33b5e5"
-            android:layout_marginLeft="20dp" />
+            android:layout_marginLeft="203dp" />
     </LinearLayout>
 
     <TextView
