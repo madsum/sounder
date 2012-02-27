@@ -33,7 +33,7 @@ public class ListTitreActivity extends Activity
       }
 
       private void init_phone_music_grid() {
-            System.gc();
+          //  System.gc();
             String[] proj = { MediaStore.Audio.Media._ID,
             				  MediaStore.Audio.Media.DATA,
             				  MediaStore.Audio.Media.DISPLAY_NAME,
@@ -55,7 +55,7 @@ public class ListTitreActivity extends Activity
             public void onItemClick(AdapterView parent, View v, int position,
 long id) {
             	
-            	  System.gc();
+            	  //System.gc();
                   music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
                   musiccursor.moveToPosition(position);
                   String artist = musiccursor.getString(music_column_index);
@@ -85,7 +85,7 @@ long id) {
             }
 
             public View getView(int position, View convertView, ViewGroup parent) {
-                  System.gc();
+                  //System.gc();
                   TextView tv = new TextView(mContext.getApplicationContext());
                   String id = null;
                   if (convertView == null) {
