@@ -11,14 +11,14 @@
         android:label="@string/app_name" >
         <activity
             android:name=".SounderActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="PlayerActivity"></activity>
+        <activity android:name="PlayerActivity" android:launchMode="singleInstance"></activity>
         <activity android:name="AllListActivity"></activity>
         <activity android:name="ArtistsActivity"></activity>
 	<activity android:name="AlbumsActivity"></activity>
