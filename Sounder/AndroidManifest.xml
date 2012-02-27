@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name="PlayerActivity" android:launchMode="singleInstance"></activity>
+
         <activity android:name="AllListActivity"></activity>
         <activity android:name="ArtistsActivity"></activity>
 	<activity android:name="AlbumsActivity"></activity>
@@ -26,6 +27,9 @@
 	<activity android:name="TabsActivity" android:label="@string/app_name"
           android:theme="@android:style/Theme.NoTitleBar"></activity>
 	<activity android:name="PlayListsActivity"></activity>
+	<activity android:name="ListAlbumActivity"></activity>
+	<activity android:name="ListArtistActivity"></activity>
+	<activity android:name="ListTitreActivity"></activity>
     </application>
 
 </manifest>
