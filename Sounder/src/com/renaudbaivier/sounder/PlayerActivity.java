@@ -9,6 +9,9 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -44,6 +47,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	ImageView loop_on;
 	boolean loop;
 	TextView loop_t;
+	Animation loop_t_a;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         loop_on = (ImageView) findViewById(R.id.loop_on);
         loop = false;
         loop_t = (TextView) findViewById(R.id.loop_t);
+        loop_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
         path = "sdcard";
         file = "mp3.mp3";
         pathfile = Uri.parse("file:///"+path+"/"+file);
@@ -121,6 +126,19 @@ public class PlayerActivity extends MenuActivity implements Runnable {
             };
         });
         
+        // Listener de lanimation
+        loop_t_a.setAnimationListener(new AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+            public void onAnimationRepeat(Animation animation) {
+            }
+            public void onAnimationEnd(Animation animation) {
+                    // Ici, l'animation est terminée !
+            }
+    });
+        
+        
+        
         currentThread = new Thread(this);
     	currentThread.start();
     }
@@ -169,7 +187,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     		loop_off.setVisibility(View.INVISIBLE);
         	loop_on.setVisibility(View.VISIBLE);
         	loop = true;
-        	//loop_t.layout(l, t, r, b)
+        	loop_t.startAnimation(loop_t_a);
     	} else {
     		loop_off.setVisibility(View.VISIBLE);
         	loop_on.setVisibility(View.INVISIBLE);
@@ -183,7 +201,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     public void run() {
     	currentPosition = 0;
         total = mediaPlayer.getDuration();
-        while (mediaPlayer!=null && currentPosition<total) {
+        while (mediaPlayer != null && currentPosition < total) {
         	try {
                 Thread.sleep(100);
                 currentPosition = mediaPlayer.getCurrentPosition();
