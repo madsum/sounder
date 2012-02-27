@@ -113,7 +113,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:max="100"
-        android:progress="0" />
+        android:progress="0"
+		android:thumb="@drawable/seek_thumb" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
