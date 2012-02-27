@@ -33,7 +33,8 @@ public class TabsActivity extends TabActivity {
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 
-	    intent = new Intent().setClass(this, SongsActivity.class);
+	    
+	    intent = new Intent().setClass(this, ListTitreActivity.class);
 	    spec = tabHost.newTabSpec("songs").setIndicator("Songs",
 	                      res.getDrawable(android.R.drawable.arrow_down_float))
 	                  .setContent(intent);
@@ -46,5 +47,10 @@ public class TabsActivity extends TabActivity {
 	    tabHost.addTab(spec);
 
 	    tabHost.setCurrentTab(2);
+	    
+	    
+	    
+	  
+	    
 	}
 }
