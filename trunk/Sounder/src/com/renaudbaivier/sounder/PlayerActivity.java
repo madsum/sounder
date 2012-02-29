@@ -55,7 +55,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 
 	
 	 //liste de lecture courante
-   private ArrayList<String> currentPlayList = new ArrayList<String>();
+   private ArrayList<Song> currentPlayList = new ArrayList<Song>();
 	int currentSong = 0;
    
 	
@@ -84,46 +84,31 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         loop_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
         path = "mnt/sdcard";
         file = "mp3.mp3";
-        //pathfile = Uri.parse("file:////mnt/sdcard/SleepAway.mp3");
-    
         
-        // Lecteur
-       // mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);
-     
-     /*String filename= "/mnt/sdcard/SleepAway.mp3";*/
      mediaPlayer=new MediaPlayer();
-   /*  instance++;
-		try {
-			mediaPlayer.setDataSource(filename);
-			mediaPlayer.prepare();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
-   
-      
-        // Listener de lanimation
-        loop_t_a.setAnimationListener(new AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
-            public void onAnimationRepeat(Animation animation) {
-            }
-            public void onAnimationEnd(Animation animation) {
-                    // Ici, l'animation est terminée !
-            }
-    });
-        
-        
-        
-       // currentThread = new Thread(this);
-    	//currentThread.start();
+     
+     testInstanceWithExtra();
+ 
+    }
+    
+    public void testInstanceWithExtra(){
+    	try {
+    		String function = getIntent().getCharSequenceExtra("function").toString();
+    		if(function.equals("add1")){
+    	    	
+        		Song song = getIntent().getExtras().getParcelable("song");
+        		this.addASong(song);
+        		if(instance==0){
+        			this.play();
+        		}
+        	}
+    	}catch (NullPointerException e) {
+    		
+    		
+			// TODO: handle exception
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
     }
     
 
@@ -170,18 +155,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         		if(loop == false){
         		ff();
         		}
-        		/*if(instance<currentPlayList.size() || loop){
-        			
-        		}else{
-        		mediaPlayer.reset();
-        		mediaPlayer=null;
-        		
-        		pause.setVisibility(View.INVISIBLE);
-            	play.setVisibility(View.VISIBLE);
-            	timeprogress.setProgress(0);
-            	current.setText("00:00");
-            	remaining.setText("-00:00");
-        		}*/
+        
             };
         });
         
@@ -236,8 +210,9 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         				mediaPlayer.reset();
         				mediaPlayer=null;
         				mediaPlayer=new MediaPlayer();
-						mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong));
+						mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong).getFilePath());
 						mediaPlayer.prepare();
+						
 						instance++;
 					} catch (IllegalArgumentException e) {
 						// TODO Auto-generated catch block
@@ -251,6 +226,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 					}
     			}
     			this.synchronizeSeekBar();
+    			loadInformation();
     			//ca.execute();
     			
     			mediaPlayer.start();
@@ -271,7 +247,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     			if(instance<=0){
     				mediaPlayer=new MediaPlayer();
     				try {
-						mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong));
+						mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong).getFilePath());
 						instance++;
 						mediaPlayer.prepare();
 					} catch (IllegalArgumentException e) {
@@ -286,6 +262,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 					}
     			}
     			this.synchronizeSeekBar();
+    			loadInformation();
     			mediaPlayer.start();
             	pause.setVisibility(View.VISIBLE);
             	play.setVisibility(View.INVISIBLE);	
@@ -315,16 +292,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     		instance++;
 			mediaPlayer.prepare();
 			
-			/*reconnexion a la seekbare
-			mediaPlayer.setOnCompletionListener(new OnCompletionListener(){
-	        	public void onCompletion(MediaPlayer arg0) {
-	        		pause.setVisibility(View.INVISIBLE);
-	            	play.setVisibility(View.VISIBLE);
-	            	timeprogress.setProgress(0);
-	            	current.setText("00:00");
-	            	remaining.setText("-00:00");
-	            };
-	        });*/
+			
 			this.play();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -343,6 +311,16 @@ public class PlayerActivity extends MenuActivity implements Runnable {
        
         
     	
+    }
+    
+    public void loadInformation(){
+    	Song song = this.currentPlayList.get(currentSong);
+    TextView tv =	(TextView) findViewById(R.id.album);
+    tv.setText(song.getAlbum());
+    tv =	(TextView) findViewById(R.id.artist);
+    tv.setText(song.getArtist());
+    tv =	(TextView) findViewById(R.id.track);
+    tv.setText(song.getTitre());
     }
     
     // Pause du MP3
@@ -370,7 +348,7 @@ currentSong--;
 if(currentSong<0){
 	currentSong=this.currentPlayList.size()-1;
 }
-this.stopAndPlay(this.currentPlayList.get(currentSong));
+this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     	}
     }
     
@@ -385,7 +363,7 @@ currentSong++;
 if(currentSong>=this.currentPlayList.size()){
 	currentSong=0;
 }
-this.stopAndPlay(this.currentPlayList.get(currentSong));
+this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     }
     }
     
@@ -398,7 +376,7 @@ currentSong++;
 if(currentSong>=this.currentPlayList.size()){
 	currentSong=0;
 }
-this.stopAndPlay(this.currentPlayList.get(currentSong));
+this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     }
     }
     
@@ -453,8 +431,11 @@ this.stopAndPlay(this.currentPlayList.get(currentSong));
     		String function = intent.getCharSequenceExtra("function").toString();
     		if(function.equals("add1")){
     	    	
-        		String song = intent.getCharSequenceExtra("song").toString();
+        		Song song = intent.getExtras().getParcelable("song");
         		this.addASong(song);
+        		if(instance==0){
+        			this.play();
+        		}
         	}
     	}catch (NullPointerException e) {
     		
@@ -469,7 +450,7 @@ this.stopAndPlay(this.currentPlayList.get(currentSong));
     }
     
   //ajout d'une chanson 
-	private void addASong(String song){
+	private void addASong(Song song){
 		this.currentPlayList.add(song);
 	
 	}

@@ -5,10 +5,15 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.TabHost;
 
 public class TabsActivity extends TabActivity {
 
+
+	
+	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.tabs);
@@ -16,9 +21,12 @@ public class TabsActivity extends TabActivity {
 	    TabHost tabHost = getTabHost();  // The activity TabHost
 	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
 	    Intent intent;  // Reusable Intent for each tab
+	    
+	    		 
+	    		
 
 	    // Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent().setClass(this, ArtistsActivity.class);
+	    intent = new Intent().setClass(this, ListArtistActivity.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
 	    spec = tabHost.newTabSpec("artists").setIndicator("Artists",
@@ -27,7 +35,7 @@ public class TabsActivity extends TabActivity {
 	    tabHost.addTab(spec);
 
 	    // Do the same for the other tabs
-	    intent = new Intent().setClass(this, AlbumsActivity.class);
+	    intent = new Intent().setClass(this, ListAlbumActivity.class);
 	    spec = tabHost.newTabSpec("albums").setIndicator("Albums",
 	                      res.getDrawable(android.R.drawable.ic_menu_share))
 	                  .setContent(intent);

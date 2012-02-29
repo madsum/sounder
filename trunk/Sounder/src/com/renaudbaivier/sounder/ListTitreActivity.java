@@ -40,6 +40,7 @@ public class ListTitreActivity extends Activity
             String[] proj = { MediaStore.Audio.Media._ID,
             				  MediaStore.Audio.Media.DATA,
             				  MediaStore.Audio.Media.DISPLAY_NAME,
+            				  MediaStore.Audio.Media.ARTIST,
             				  MediaStore.Audio.Media.ALBUM,
             				  MediaStore.Audio.Media.TITLE,
             				  MediaStore.Video.Media.SIZE };
@@ -59,32 +60,27 @@ public class ListTitreActivity extends Activity
 long id) {
             	
             	  //System.gc();
-                  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+                  
                   musiccursor.moveToPosition(position);
-                  //String artist = musiccursor.getString(music_column_index);
+                 
+                  music_column_index =  musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
+                  String title = musiccursor.getString(music_column_index);
+                  music_column_index =  musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
+                  String album = musiccursor.getString(music_column_index);
+                  music_column_index =  musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
+                  String artist = musiccursor.getString(music_column_index);
+                  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
                   String filename = musiccursor.getString(music_column_index);
-                 /* MediaPlayer mMediaPlayer=new MediaPlayer();
-                  try {
-                      if (mMediaPlayer.isPlaying()) {
-                            mMediaPlayer.reset();
-                      }
-                      mMediaPlayer.setDataSource(filename);
-                      mMediaPlayer.prepare();
-                      mMediaPlayer.start();
-                } catch (Exception e) {
-
-                }*/
-                  
-                  
-                  
-                  
-                  
-                  
+                      
+                  Song song = new Song(title, album, artist, filename);
+            
                  // appelle de la methode d'ajout du player
                   Intent intent = new Intent(ctx,com.renaudbaivier.sounder.PlayerActivity.class);
                  String methode = "add1";
-                  intent.putExtra("function", methode);
-                  intent.putExtra("song", filename);
+                 
+                intent.putExtra("function", methode);
+                 // intent.putExtra("song", filename);
+                intent.putExtra("song", song);
                   startActivity(intent);
                 /* 
           	  Toast.makeText(getApplicationContext(), "Vous avez cliqué sur le titre: "+artist, Toast.LENGTH_SHORT).show();
