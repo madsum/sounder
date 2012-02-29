@@ -47,22 +47,28 @@
 
     <TextView
         android:id="@+id/artist"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:text="@string/artist"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp"
         android:textColor="#33b5e5"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        android:singleLine="true"
+        android:ellipsize="end" />
 
     <TextView
         android:id="@+id/album"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:text="@string/album"
         android:layout_marginLeft="20dp"
         android:textColor="#33b5e5"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:singleLine="true"
+        android:ellipsize="end"
+       
+         />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -140,12 +146,18 @@
 
     <TextView
         android:id="@+id/track"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:text="@string/track"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:textColor="#33b5e5"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:focusable="true" 
+android:focusableInTouchMode="true" 
+        android:marqueeRepeatLimit="-1"
+         />
 
 </LinearLayout>
