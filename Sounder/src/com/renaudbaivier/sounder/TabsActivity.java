@@ -45,7 +45,6 @@ public class TabsActivity extends TabActivity {
 	                      res.getDrawable(android.R.drawable.ic_menu_agenda))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
-
 	    tabHost.setCurrentTab(2);
 	    
 	    

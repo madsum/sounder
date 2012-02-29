@@ -2,6 +2,7 @@ package com.renaudbaivier.sounder;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class ListTitreActivity extends Activity
       Cursor musiccursor;
       int music_column_index;
       int count;
+      Context ctx;
       //MediaPlayer mMediaPlayer;
 
       /** Called when the activity is first created. */
@@ -29,6 +31,7 @@ public class ListTitreActivity extends Activity
       {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.listetitre);
+            ctx=getApplicationContext();
             init_phone_music_grid();
       }
 
@@ -56,12 +59,37 @@ public class ListTitreActivity extends Activity
 long id) {
             	
             	  //System.gc();
-                  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
+                  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
                   musiccursor.moveToPosition(position);
-                  String artist = musiccursor.getString(music_column_index);
-          	  
+                  //String artist = musiccursor.getString(music_column_index);
+                  String filename = musiccursor.getString(music_column_index);
+                 /* MediaPlayer mMediaPlayer=new MediaPlayer();
+                  try {
+                      if (mMediaPlayer.isPlaying()) {
+                            mMediaPlayer.reset();
+                      }
+                      mMediaPlayer.setDataSource(filename);
+                      mMediaPlayer.prepare();
+                      mMediaPlayer.start();
+                } catch (Exception e) {
+
+                }*/
+                  
+                  
+                  
+                  
+                  
+                  
+                 // appelle de la methode d'ajout du player
+                  Intent intent = new Intent(ctx,com.renaudbaivier.sounder.PlayerActivity.class);
+                 String methode = "add1";
+                  intent.putExtra("function", methode);
+                  intent.putExtra("song", filename);
+                  startActivity(intent);
+                /* 
           	  Toast.makeText(getApplicationContext(), "Vous avez cliqué sur le titre: "+artist, Toast.LENGTH_SHORT).show();
-                
+              */  
+          	  
             }
       };
 

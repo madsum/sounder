@@ -20,7 +20,7 @@ public class SounderActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
        
-        listeRepertoire(new File("/mnt/sdcard"));        
+        //listeRepertoire(new File("/mnt/sdcard"));        
         
     }
     

@@ -1,13 +1,16 @@
 package com.renaudbaivier.sounder;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -48,6 +51,17 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	boolean loop;
 	TextView loop_t;
 	Animation loop_t_a;
+	int instance=0;
+
+	
+	 //liste de lecture courante
+   private ArrayList<String> currentPlayList = new ArrayList<String>();
+	int currentSong = 0;
+   
+	
+
+
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,18 +82,53 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         loop = false;
         loop_t = (TextView) findViewById(R.id.loop_t);
         loop_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
-        path = "sdcard";
+        path = "mnt/sdcard";
         file = "mp3.mp3";
-        pathfile = Uri.parse("file:///"+path+"/"+file);
+        //pathfile = Uri.parse("file:////mnt/sdcard/SleepAway.mp3");
+    
         
-        //MediaStore mediaStore = MediaStore.
-		
         // Lecteur
-        mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);
+       // mediaPlayer = MediaPlayer.create(getBaseContext(), pathfile);
+     
+     /*String filename= "/mnt/sdcard/SleepAway.mp3";*/
+     mediaPlayer=new MediaPlayer();
+   /*  instance++;
+		try {
+			mediaPlayer.setDataSource(filename);
+			mediaPlayer.prepare();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+   
+      
+        // Listener de lanimation
+        loop_t_a.setAnimationListener(new AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+            public void onAnimationRepeat(Animation animation) {
+            }
+            public void onAnimationEnd(Animation animation) {
+                    // Ici, l'animation est terminŽe !
+            }
+    });
         
-        // Recuperation des tags
         
-        // La seekbar pour la visibilite de la lecture et le deplacement
+        
+       // currentThread = new Thread(this);
+    	//currentThread.start();
+    }
+    
+
+    private void synchronizeSeekBar(){
+    	// La seekbar pour la visibilite de la lecture et le deplacement
         timeprogress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
     		@Override
     		public void onStopTrackingTouch(SeekBar seekBar) {
@@ -118,11 +167,21 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         // ! Probleme avec la seekbar !
         mediaPlayer.setOnCompletionListener(new OnCompletionListener(){
         	public void onCompletion(MediaPlayer arg0) {
+        		if(loop == false){
+        		ff();
+        		}
+        		/*if(instance<currentPlayList.size() || loop){
+        			
+        		}else{
+        		mediaPlayer.reset();
+        		mediaPlayer=null;
+        		
         		pause.setVisibility(View.INVISIBLE);
             	play.setVisibility(View.VISIBLE);
             	timeprogress.setProgress(0);
             	current.setText("00:00");
             	remaining.setText("-00:00");
+        		}*/
             };
         });
         
@@ -140,17 +199,150 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         
         
         currentThread = new Thread(this);
-    	currentThread.start();
+    currentThread.start();
+ 
     }
     
+    @Override
+    public void onDestroy() {
+        Log.i("DUMMY DEBUG", "onDestroy()");
+        currentThread=null;
+        mediaPlayer.release();
+        mediaPlayer=null;
+        super.onDestroy();
+    }
+
+    
+    
+    protected void onResume() {
+        super.onResume();
+        if (mediaPlayer.isPlaying()) { 	
+	    	pause.setVisibility(View.VISIBLE);
+	    	play.setVisibility(View.INVISIBLE);
+    	}
+    }
+    
+
     // Lecture du MP3
     public void play(View v) {
     	if (!mediaPlayer.isPlaying())
     	{
-    		mediaPlayer.start();
-        	pause.setVisibility(View.VISIBLE);
-        	play.setVisibility(View.INVISIBLE);
+    		if( this.currentPlayList.size()>0){
+    			if(instance<=0){
+    				
+    	    		
+    				try {
+    					currentThread=null;
+        				mediaPlayer.reset();
+        				mediaPlayer=null;
+        				mediaPlayer=new MediaPlayer();
+						mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong));
+						mediaPlayer.prepare();
+						instance++;
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalStateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+    			}
+    			this.synchronizeSeekBar();
+    			//ca.execute();
+    			
+    			mediaPlayer.start();
+            	pause.setVisibility(View.VISIBLE);
+            	play.setVisibility(View.INVISIBLE);	
+    		}else{
+    			Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
+    		}
+    		
     	}
+    }
+ // Lecture du MP3
+    public void play() {
+    	if (!mediaPlayer.isPlaying())
+    	{
+    		
+    		if( this.currentPlayList.size()>0){
+    			if(instance<=0){
+    				mediaPlayer=new MediaPlayer();
+    				try {
+						mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong));
+						instance++;
+						mediaPlayer.prepare();
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalStateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+    			}
+    			this.synchronizeSeekBar();
+    			mediaPlayer.start();
+            	pause.setVisibility(View.VISIBLE);
+            	play.setVisibility(View.INVISIBLE);	
+    		}else{
+    			Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
+    			this.currentSong=0;
+    		}
+    		
+    	}
+    }
+    
+ // Lecture du MP3 aprés interuption
+    public void stopAndPlay(String filename) {
+    	if (mediaPlayer.isPlaying())
+    	{
+    		mediaPlayer.stop();
+    		
+    	}
+    	
+    	try {
+    		
+    		currentThread=null;
+    		mediaPlayer.reset();
+    		mediaPlayer=null;
+    		mediaPlayer=new MediaPlayer();
+    		mediaPlayer.setDataSource(filename);
+    		instance++;
+			mediaPlayer.prepare();
+			
+			/*reconnexion a la seekbare
+			mediaPlayer.setOnCompletionListener(new OnCompletionListener(){
+	        	public void onCompletion(MediaPlayer arg0) {
+	        		pause.setVisibility(View.INVISIBLE);
+	            	play.setVisibility(View.VISIBLE);
+	            	timeprogress.setProgress(0);
+	            	current.setText("00:00");
+	            	remaining.setText("-00:00");
+	            };
+	        });*/
+			this.play();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+       
+        
+    	
     }
     
     // Pause du MP3
@@ -171,14 +363,43 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     
     // REW du MP3
     public void rew(View v) {
-
+    	if(this.currentPlayList.size()<=0){
+    		Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
+    	}else{
+currentSong--;
+if(currentSong<0){
+	currentSong=this.currentPlayList.size()-1;
+}
+this.stopAndPlay(this.currentPlayList.get(currentSong));
+    	}
     }
     
     // FF (non Laurent ce nest pas FonkyFamily) du MP3
     // appui court = piste suivante
     // appui long = avance rapide
     public void ff(View v) {
-
+    	if(this.currentPlayList.size()<=0){
+    		Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
+    	}else{
+currentSong++;
+if(currentSong>=this.currentPlayList.size()){
+	currentSong=0;
+}
+this.stopAndPlay(this.currentPlayList.get(currentSong));
+    }
+    }
+    
+    
+    public void ff() {
+    	if(this.currentPlayList.size()<=0){
+    		Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
+    	}else{
+currentSong++;
+if(currentSong>=this.currentPlayList.size()){
+	currentSong=0;
+}
+this.stopAndPlay(this.currentPlayList.get(currentSong));
+    }
     }
     
     // Loop
@@ -206,12 +427,14 @@ public class PlayerActivity extends MenuActivity implements Runnable {
                 Thread.sleep(100);
                 currentPosition = mediaPlayer.getCurrentPosition();
                 timeprogress.setMax(mediaPlayer.getDuration());
+                timeprogress.setProgress(currentPosition);
             } catch (InterruptedException e) {
                 return;
             } catch (Exception e) {
+            	mediaPlayer=null;
                 return;
             }            
-            timeprogress.setProgress(currentPosition);
+           
         }
     }
     
@@ -220,4 +443,36 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     	tSounder = new Intent(PlayerActivity.this, SounderActivity.class);
         startActivity(tSounder);
     }
+    
+    
+    
+    //recupération d'une instruction externe  ex. nouvelle chanson
+    @Override
+    protected void onNewIntent(Intent intent) {
+    	try {
+    		String function = intent.getCharSequenceExtra("function").toString();
+    		if(function.equals("add1")){
+    	    	
+        		String song = intent.getCharSequenceExtra("song").toString();
+        		this.addASong(song);
+        	}
+    	}catch (NullPointerException e) {
+    		
+    		
+			// TODO: handle exception
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+    	
+    	
+    	
+    }
+    
+  //ajout d'une chanson 
+	private void addASong(String song){
+		this.currentPlayList.add(song);
+	
+	}
+	
+
 }
