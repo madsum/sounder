@@ -10,6 +10,7 @@
     <string name="track">Track</string>
     <string name="current">00:00</string>
     <string name="remaining">-00:00</string>
+    <string name="empty">aucune chanson dans la liste en cours</string>
     
     <!-- Menu -->
     <string name="player">Player</string>
