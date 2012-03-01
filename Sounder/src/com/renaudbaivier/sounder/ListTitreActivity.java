@@ -43,7 +43,7 @@ public class ListTitreActivity extends Activity
             				  MediaStore.Audio.Media.ARTIST,
             				  MediaStore.Audio.Media.ALBUM,
             				  MediaStore.Audio.Media.TITLE,
-            				//  MediaStore.Audio.Media.ALBUM_ART
+            				 //MediaStore.Audio.Media.ALBUM_ART
             };
             musiccursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,proj, null, null, null);
             count = musiccursor.getCount();
