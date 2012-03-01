@@ -7,11 +7,13 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.TabHost;
 
 public class TabsActivity extends TabActivity {
 
-
+	
 	
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,5 +61,12 @@ public class TabsActivity extends TabActivity {
 	    
 	  
 	    
+	}
+	
+	
+	
+	public void finish (){
+		Log.d("DUMMY DEBUG", "TABS KILLED");
+		super.finish();
 	}
 }
