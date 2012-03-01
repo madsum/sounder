@@ -21,17 +21,12 @@
         android:text="@string/player"
         android:onClick="player" />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Liste" 
-        android:onClick="listerMusique"/>
+  
     <Button
         android:id="@+id/buttontest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="multi liste" 
+        android:text="@string/liste" 
         android:onClick="ouvreOnglet"/>
 
 </LinearLayout>

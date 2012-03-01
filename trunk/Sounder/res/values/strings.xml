@@ -3,7 +3,7 @@
 
     <string name="app_name">Sounder</string>
     <string name="sounder">Sounder</string>
-
+<string name="liste">Liste</string>
     <!--  Player -->
     <string name="artist">Artist</string>
     <string name="album">Album</string>
