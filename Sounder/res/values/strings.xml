@@ -3,7 +3,8 @@
 
     <string name="app_name">Sounder</string>
     <string name="sounder">Sounder</string>
-<string name="liste">Liste</string>
+	<string name="liste">Liste</string>
+
     <!--  Player -->
     <string name="artist">Artist</string>
     <string name="album">Album</string>
@@ -11,6 +12,8 @@
     <string name="current">00:00</string>
     <string name="remaining">-00:00</string>
     <string name="empty">aucune chanson dans la liste en cours</string>
+    <string name="nb_track">0/0</string>
+    <string name="shuffle">Shuf</string>
     
     <!-- Menu -->
     <string name="player">Player</string>
