@@ -133,7 +133,7 @@ import android.widget.Toast;
 				  MediaStore.Audio.Media.ARTIST,
 				  MediaStore.Audio.Media.ALBUM,
 				  MediaStore.Audio.Media.TITLE,
-				//  MediaStore.Audio.Media.ALBUM_ART
+				 MediaStore.Audio.Media.ALBUM_ID
 			};
     		HashMap albums = (HashMap)parent.getExpandableListAdapter().getGroup(groupPosition);
     		String myAlbum = (String) albums.get("Group Item");
@@ -153,7 +153,9 @@ import android.widget.Toast;
 	         String artist = musiccursor.getString(music_column_index);
 	         music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
 	         String filename = musiccursor.getString(music_column_index);
-	         songs[i] = new Song(title, album, artist, filename);
+	         music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID);
+             String albumArt = musiccursor.getString(music_column_index);
+	         songs[i] = new Song(title, album, artist, filename,albumArt);
 	         //Toast.makeText(getApplicationContext(),"album: "+ album+" zik: "+ title, Toast.LENGTH_SHORT).show();
 			}          
          

@@ -10,19 +10,35 @@ public class Song implements Parcelable
   private String album;
   private String artist;
   private String filePath;
+  private String album_art;
   
   
+/**
+ * @return the album_art
+ */
+public String getAlbum_art() {
+	return album_art;
+}
+
+/**
+ * @param album_art the album_art to set
+ */
+public void setAlbum_art(String album_art) {
+	this.album_art = album_art;
+}
+
 public Song( String titre, String album, String artist,
-		String filePath) {
+		String filePath,String album_art) {
 	super();
 	
 	this.titre = titre;
 	this.album = album;
 	this.artist = artist;
 	this.filePath = filePath;
+	this.album_art=album_art;
 }
 
-//appellé à la désérialisation
+//appele a la deserialisation
 public Song(Parcel in) {
     
     
@@ -30,6 +46,7 @@ public Song(Parcel in) {
 	this.album = in.readString();
 	this.artist = in.readString();
 	this.filePath = in.readString();
+	this.album_art = in.readString();
 }
 
 
@@ -47,7 +64,7 @@ public void writeToParcel(Parcel dest, int flags) {
 	    dest.writeString(album);
 	    dest.writeString(artist);
 	    dest.writeString(filePath);
-	    
+	    dest.writeString(album_art);
 	
 }
   
