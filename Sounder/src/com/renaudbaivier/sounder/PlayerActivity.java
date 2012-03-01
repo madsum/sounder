@@ -57,6 +57,11 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	boolean loop;
 	TextView loop_t;
 	Animation loop_t_a;
+	ImageView shuffle_off;
+	ImageView shuffle_on;
+	boolean shuffle;
+	TextView shuffle_t;
+	Animation shuffle_t_a;
 	int instance=0;
 	boolean keep_alive_thread=true;
 	float mLastTouchX=0;
@@ -91,6 +96,11 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         loop = false;
         loop_t = (TextView) findViewById(R.id.loop_t);
         loop_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
+        shuffle_off = (ImageView) findViewById(R.id.shuffle_off);
+        shuffle_on = (ImageView) findViewById(R.id.shuffle_on);
+        shuffle = false;
+        shuffle_t = (TextView) findViewById(R.id.shuffle_t);
+        shuffle_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
         path = "mnt/sdcard";
         file = "mp3.mp3";
         
@@ -236,7 +246,7 @@ private void unSynchronizeSeekBar(){
             };
         });
         
-        // Listener de lanimation
+        // Listener de lanimation du loop
         loop_t_a.setAnimationListener(new AnimationListener() {
             public void onAnimationStart(Animation animation) {
             }
@@ -245,7 +255,18 @@ private void unSynchronizeSeekBar(){
             public void onAnimationEnd(Animation animation) {
                     // Ici, l'animation est terminée !
             }
-    });
+        });
+            
+        // Listener de lanimation du shuffle
+        shuffle_t_a.setAnimationListener(new AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+            public void onAnimationRepeat(Animation animation) {
+            }
+            public void onAnimationEnd(Animation animation) {
+                    // Ici, l'animation est terminée !
+            }
+        });
         
         
         
