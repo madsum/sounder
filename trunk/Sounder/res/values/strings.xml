@@ -26,5 +26,8 @@
     <string name="loop_off">Loop off </string>
     <string name="sh_on">Shuffle on </string>
     <string name="sh_off">Shuffle off </string>
+    <!-- Erreurs -->
+    <string  name="img_error">Impossible de charger l\'image</string>
+    <string  name="corrupt_file_error">Fichier corrompu</string>
 
 </resources>
