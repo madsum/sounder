@@ -13,6 +13,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -513,7 +514,15 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     	
     }
     
-    
+    private void loadNewCurrentList(Song[] songs,int startindex){
+    	this.currentPlayList.clear();
+    	this.instance=0;
+    	this.currentSong=startindex;
+    	for(Song song : songs){
+    		this.addASong(song);
+    	}
+    	this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
+    }
     
     //recupération d'une instruction externe  ex. nouvelle chanson
     @Override
@@ -527,14 +536,37 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
         		if(instance==0){
         			this.play();
         		}
+        		
+        		
+        		
+        		
+        		
+        		
         	}
+    		if(function.equals("addMultiple")){
+   	    	 Parcelable[] parcels =	intent.getExtras().getParcelableArray("newlist");
+   	    	Song[] songs = new Song[parcels.length];
+   	    	int i=0;
+   	    	for (Parcelable par : parcels){
+   	    	     songs[i]=(Song)par;   
+   	    	     i++;
+   	    	}
+
+   	    	 
+   	    	 
+   	    	 int startIndex =	intent.getIntExtra("startIndex",0);
+   	    	 this.loadNewCurrentList(songs, startIndex);
+   		}
     	}catch (NullPointerException e) {
     		
     		
 			// TODO: handle exception
-		}catch (Exception e) {
-			// TODO: handle exception
 		}
+    	
+    	/*catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}*/
     	
     	
     	
