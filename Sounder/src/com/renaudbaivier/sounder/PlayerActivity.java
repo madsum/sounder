@@ -303,7 +303,9 @@ private void unSynchronizeSeekBar(){
     @Override
     public void onDestroy() {
         Log.i("DUMMY DEBUG", "onDestroy()");
+        if(this.currentPlayList.size()>0){
         this.saveLastSongPreference(this, "song_relica", this.currentPlayList.get(currentSong));
+        }
         keep_alive_thread=false;
         currentThread=null;
         unSynchronizeSeekBar();
@@ -798,8 +800,25 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
    }
 	private void reset(){
 		setContentView(R.layout.player);
-		this.shuffle=false;
-		this.loop=false;
+		
+		play = (ImageView) findViewById(R.id.play);
+        pause = (ImageView) findViewById(R.id.pause);
+        artist = (TextView) findViewById(R.id.artist);
+        album = (TextView) findViewById(R.id.album);
+        track = (TextView) findViewById(R.id.track);
+        current = (TextView) findViewById(R.id.current);
+        remaining = (TextView) findViewById(R.id.remaining);
+        timeprogress = (SeekBar) findViewById(R.id.timeprogress);
+        loop_off = (ImageView) findViewById(R.id.loop_off);
+        loop_on = (ImageView) findViewById(R.id.loop_on);
+        loop = false;
+        loop_t = (TextView) findViewById(R.id.loop_t);
+        loop_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
+        shuffle_off = (ImageView) findViewById(R.id.shuffle_off);
+        shuffle_on = (ImageView) findViewById(R.id.shuffle_on);
+        shuffle = false;
+        shuffle_t = (TextView) findViewById(R.id.shuffle_t);
+        shuffle_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
 	}
 	private void clean(){
 		this.mediaPlayer=null;
