@@ -24,17 +24,13 @@ public class SounderActivity extends MenuActivity {
         
     }
     
-    public void listerMusique(View v)
-    {
-    	Intent t = new Intent(SounderActivity.this, AllListActivity.class);
-    	startActivity(t);
-    	
-    }
+ 
    
 
 	// Pour DEV
     public void player(View v){
     	Intent t = new Intent(SounderActivity.this, PlayerActivity.class);
+    	t.addFlags(t.FLAG_ACTIVITY_CLEAR_TOP);
     	t.putExtra("liste", this.filePath);
     	startActivity(t);
     }

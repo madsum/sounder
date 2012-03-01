@@ -4,13 +4,18 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -52,6 +57,9 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	TextView loop_t;
 	Animation loop_t_a;
 	int instance=0;
+	boolean keep_alive_thread=true;
+	float mLastTouchX=0;
+	float mLastTouchY=0;
 
 	
 	 //liste de lecture courante
@@ -86,11 +94,76 @@ public class PlayerActivity extends MenuActivity implements Runnable {
         file = "mp3.mp3";
         
      mediaPlayer=new MediaPlayer();
+   
+
+     Song lastSong = this.getLastSongPreference(this, "song_relica");
+     if(!lastSong.getFilePath().equals("N/A")){
+    	 this.addASong(lastSong);
+    	 this.loadLastSong();
+    	 
+     }
      
-     testInstanceWithExtra();
+    // testInstanceWithExtra();
  
     }
     
+    public void loadLastSong(){
+    	if (!mediaPlayer.isPlaying())
+    	{
+    		if( this.currentPlayList.size()>0){
+    			if(instance<=0){
+
+
+    				try {
+
+    					unSynchronizeSeekBar();
+
+    					mediaPlayer=null;
+
+    					mediaPlayer=new MediaPlayer();
+    					mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong).getFilePath());
+    					mediaPlayer.prepare();
+
+    					instance++;
+    				} catch (IllegalArgumentException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				} catch (IllegalStateException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				} catch (IOException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    			}
+    			this.synchronizeSeekBar();
+    			loadInformation();
+    			refreshTacks();
+    		}
+    		
+    	}
+    }
+    public void saveLastSongPreference(Activity activity,String namespace,Song value){
+  	  SharedPreferences prefs = activity.getSharedPreferences(namespace, this.MODE_PRIVATE);
+  	  SharedPreferences.Editor editor = prefs.edit();
+  	  
+  	  editor.putString("title_song", value.getTitre());
+  	editor.putString("album_song", value.getAlbum());
+  	editor.putString("artist_song", value.getArtist());
+  	editor.putString("filename_song", value.getFilePath());
+  	  editor.commit();
+  	}
+
+  	
+  	public Song getLastSongPreference(Activity activity,String namespace){
+  	  SharedPreferences prefs = activity.getSharedPreferences(namespace,this.MODE_PRIVATE);
+  String titre=  prefs.getString("title_song", "N/A");
+  String album =	prefs.getString("album_song", "N/A");
+  String artist =	prefs.getString("artist_song", "N/A");
+  String filepath =	prefs.getString("filename_song", "N/A");
+  	Song lastSong=new Song(titre, album, artist, filepath);
+  	  return lastSong;
+  	}
     public void testInstanceWithExtra(){
     	try {
     		String function = getIntent().getCharSequenceExtra("function").toString();
@@ -111,8 +184,11 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 		}
     }
     
-
+private void unSynchronizeSeekBar(){
+	keep_alive_thread=false;     
+}
     private void synchronizeSeekBar(){
+    	keep_alive_thread=true;
     	// La seekbar pour la visibilite de la lecture et le deplacement
         timeprogress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
     		@Override
@@ -180,9 +256,15 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     @Override
     public void onDestroy() {
         Log.i("DUMMY DEBUG", "onDestroy()");
+        this.saveLastSongPreference(this, "song_relica", this.currentPlayList.get(currentSong));
+        
         currentThread=null;
+        unSynchronizeSeekBar();
         mediaPlayer.release();
         mediaPlayer=null;
+        //AAAAAAAARRRRRRGGGGG PAS BEAU  rafistolage avant de trouver mieu
+        System.exit(0);
+       
         super.onDestroy();
     }
 
@@ -206,9 +288,11 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     				
     	    		
     				try {
-    					currentThread=null;
-        				mediaPlayer.reset();
+    					
+    					unSynchronizeSeekBar();
+        				
         				mediaPlayer=null;
+        				
         				mediaPlayer=new MediaPlayer();
 						mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong).getFilePath());
 						mediaPlayer.prepare();
@@ -227,6 +311,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     			}
     			this.synchronizeSeekBar();
     			loadInformation();
+    			refreshTacks();
     			//ca.execute();
     			
     			mediaPlayer.start();
@@ -263,6 +348,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     			}
     			this.synchronizeSeekBar();
     			loadInformation();
+    			refreshTacks();
     			mediaPlayer.start();
             	pause.setVisibility(View.VISIBLE);
             	play.setVisibility(View.INVISIBLE);	
@@ -285,6 +371,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     	try {
     		
     		currentThread=null;
+    		unSynchronizeSeekBar();
     		mediaPlayer.reset();
     		mediaPlayer=null;
     		mediaPlayer=new MediaPlayer();
@@ -400,12 +487,13 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     public void run() {
     	currentPosition = 0;
         total = mediaPlayer.getDuration();
-        while (mediaPlayer != null && currentPosition < total) {
+        while (mediaPlayer != null && currentPosition < total && keep_alive_thread ) {
         	try {
-                Thread.sleep(100);
+                
                 currentPosition = mediaPlayer.getCurrentPosition();
                 timeprogress.setMax(mediaPlayer.getDuration());
                 timeprogress.setProgress(currentPosition);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 return;
             } catch (Exception e) {
@@ -418,8 +506,11 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     
     // A faire dans chaque class
     public void onBackPressed() {
-    	tSounder = new Intent(PlayerActivity.this, SounderActivity.class);
-        startActivity(tSounder);
+    	Intent i = new Intent(Intent.ACTION_MAIN);
+    	i.addCategory(Intent.CATEGORY_HOME);
+    	startActivity(i);
+
+    	
     }
     
     
@@ -452,8 +543,71 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
   //ajout d'une chanson 
 	private void addASong(Song song){
 		this.currentPlayList.add(song);
+		refreshTacks();
 	
 	}
 	
-
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+	    final int action = ev.getAction();
+	    
+		switch (action) {
+	    case MotionEvent.ACTION_DOWN: {
+	         float x = ev.getX();
+	         float y = ev.getY();
+	        
+	        // Remember where we started
+	        mLastTouchX = x;
+	        mLastTouchY = y;
+	        break;
+	    }
+	        
+	    case MotionEvent.ACTION_UP: {
+	    	 float x = ev.getX();
+	         float y = ev.getY();
+	        float test = Math.abs(x-mLastTouchX);
+	        if(test>=50){
+	        Intent	tabs = new Intent(this, com.renaudbaivier.sounder.TabsActivity.class);
+	            
+                startActivityForResult(tabs,22);
+	        }
+	        
+	        break;
+	    }
+	    }
+	    
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        	case R.id.player_m:
+        		tPlayer = new Intent(this, PlayerActivity.class);
+        		
+               startActivity(tPlayer);
+               return true;
+           case R.id.exit_m:
+           	finishActivity(22);
+               finish();
+               return true;
+           case R.id.search_m:
+           	tPlayer = new Intent(this, com.renaudbaivier.sounder.TabsActivity.class);
+          
+               startActivityForResult(tPlayer,22);
+           	return true;
+           case R.id.settings_m:
+        	   this.currentPlayList.clear();
+        	   instance=0;
+        	   break;
+           	
+        }
+        return false;
+   }
+	
+	
+	public void refreshTacks(){
+		TextView tv = (TextView) findViewById(R.id.nb_track);
+		tv.setText(String.format("%d/%d", (this.currentSong+1),this.currentPlayList.size()));
+	}
 }
