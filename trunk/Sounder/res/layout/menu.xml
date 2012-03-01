@@ -7,7 +7,7 @@
     android:title="@string/search" />
     
 <item android:id="@+id/settings_m"
-    android:title="@string/settings" />
+    android:title="@string/clear" />
 
 <item android:id="@+id/exit_m" 
     android:title="@string/exit" />
