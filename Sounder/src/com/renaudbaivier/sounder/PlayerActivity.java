@@ -9,13 +9,13 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -70,6 +70,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 	boolean keep_alive_thread=true;
 	float mLastTouchX=0;
 	float mLastTouchY=0;
+	int nbCorruptFile=0;
 
 	
 	 //liste de lecture courante
@@ -151,7 +152,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     					e.printStackTrace();
     				}
     			}
-    			this.synchronizeSeekBar();
+    			//this.synchronizeSeekBar();
     			loadInformation();
     			refreshTacks();
     		}
@@ -159,7 +160,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
     	}
     }
     public void saveLastSongPreference(Activity activity,String namespace,Song value){
-  	  SharedPreferences prefs = activity.getSharedPreferences(namespace, this.MODE_PRIVATE);
+  	  SharedPreferences prefs = activity.getSharedPreferences(namespace, Context.MODE_PRIVATE);
   	  SharedPreferences.Editor editor = prefs.edit();
   	  
   	  editor.putString("title_song", value.getTitre());
@@ -172,7 +173,7 @@ public class PlayerActivity extends MenuActivity implements Runnable {
 
   	
   	public Song getLastSongPreference(Activity activity,String namespace){
-  	  SharedPreferences prefs = activity.getSharedPreferences(namespace,this.MODE_PRIVATE);
+  	  SharedPreferences prefs = activity.getSharedPreferences(namespace,Context.MODE_PRIVATE);
   	  
   		String titre=  prefs.getString("title_song", "N/A");
   	  String album =	prefs.getString("album_song", "N/A");
@@ -181,7 +182,9 @@ public class PlayerActivity extends MenuActivity implements Runnable {
   	  String album_art_song =	prefs.getString("album_art_song", "0");
   	Song lastSong;
   	try {
-  		int i = Integer.parseInt(album_art_song);
+  		//verification que l'URI de l'image est un vrai numerique
+  		@SuppressWarnings("unused")
+		int i = Integer.parseInt(album_art_song);
   		lastSong=new Song(titre, album, artist, filepath,album_art_song); 
   		}
   		catch (Exception e) {
@@ -256,8 +259,13 @@ private void unSynchronizeSeekBar(){
         // ! Probleme avec la seekbar !
         mediaPlayer.setOnCompletionListener(new OnCompletionListener(){
         	public void onCompletion(MediaPlayer arg0) {
-        		if(loop == false){
+        		int songCurrentPosition = mediaPlayer.getCurrentPosition();
+        		if(loop == false ) {
+        			if(mediaPlayer.getDuration()>=songCurrentPosition){
         		ff();
+        			}else{
+        				clean();
+        			}
         		}
         
             };
@@ -296,7 +304,7 @@ private void unSynchronizeSeekBar(){
     public void onDestroy() {
         Log.i("DUMMY DEBUG", "onDestroy()");
         this.saveLastSongPreference(this, "song_relica", this.currentPlayList.get(currentSong));
-        
+        keep_alive_thread=false;
         currentThread=null;
         unSynchronizeSeekBar();
         mediaPlayer.release();
@@ -323,11 +331,11 @@ private void unSynchronizeSeekBar(){
     	if (!mediaPlayer.isPlaying())
     	{
     		if( this.currentPlayList.size()>0){
-    			if(instance<=0){
+    			
     				
     	    		
     				try {
-    					
+    					if(instance<=0){
     					unSynchronizeSeekBar();
         				
         				mediaPlayer=null;
@@ -337,25 +345,34 @@ private void unSynchronizeSeekBar(){
 						mediaPlayer.prepare();
 						
 						instance++;
+    					}
+						this.synchronizeSeekBar();
+		    			loadInformation();
+		    			refreshTacks();
+		    			//ca.execute();
+    					
+		    			mediaPlayer.start();
+		            	
 					} catch (IllegalArgumentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						this.clean();
 					} catch (IllegalStateException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						this.clean();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						this.clean();
+					}catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						this.clean();
 					}
-    			}
-    			this.synchronizeSeekBar();
-    			loadInformation();
-    			refreshTacks();
-    			//ca.execute();
+    				pause.setVisibility(View.VISIBLE);
+	            	play.setVisibility(View.INVISIBLE);	
     			
-    			mediaPlayer.start();
-            	pause.setVisibility(View.VISIBLE);
-            	play.setVisibility(View.INVISIBLE);	
     		}else{
     			Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
     		}
@@ -368,35 +385,49 @@ private void unSynchronizeSeekBar(){
     	{
     		
     		if( this.currentPlayList.size()>0){
-    			if(instance<=0){
-    				mediaPlayer=new MediaPlayer();
+    			
+    				
     				try {
+    					if(instance<=0){
+    						mediaPlayer=new MediaPlayer();
 						mediaPlayer.setDataSource(this.currentPlayList.get(this.currentSong).getFilePath());
 						instance++;
 						mediaPlayer.prepare();
+    					}
+						this.synchronizeSeekBar();
+		    			loadInformation();
+		    			refreshTacks();
+		    			
+		    			
+		            	pause.setVisibility(View.VISIBLE);
+		            	play.setVisibility(View.INVISIBLE);	
+		            	mediaPlayer.start();
 					} catch (IllegalArgumentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						this.clean();
 					} catch (IllegalStateException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						this.clean();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						this.clean();
+					}catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						this.clean();
 					}
+    			
     			}
-    			this.synchronizeSeekBar();
-    			loadInformation();
-    			refreshTacks();
-    			mediaPlayer.start();
-            	pause.setVisibility(View.VISIBLE);
-            	play.setVisibility(View.INVISIBLE);	
+    			
     		}else{
     			Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
     			this.currentSong=0;
     		}
     		
-    	}
+    	
     }
     
  // Lecture du MP3 aprés interuption
@@ -419,22 +450,22 @@ private void unSynchronizeSeekBar(){
 			mediaPlayer.prepare();
 			
 			
-			this.play();
+			
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			this.clean();
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			this.clean();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.clean();
 		}
     	
-       
+    	this.play();
         
     	
     }
@@ -459,7 +490,10 @@ private void unSynchronizeSeekBar(){
         ivCover.setImageBitmap(BitmapFactory.decodeStream(res.openInputStream(uri)));
     } catch (FileNotFoundException e) {
         e.printStackTrace();
-    }
+    }catch (Exception e) {
+		// TODO: handle exception
+    	Toast.makeText(this, getString(R.string.img_error), Toast.LENGTH_SHORT).show();
+	}
     }
     
     // Pause du MP3
@@ -718,7 +752,6 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
 	        
 	    case MotionEvent.ACTION_UP: {
 	    	 float x = ev.getX();
-	         float y = ev.getY();
 	        float test = Math.abs(x-mLastTouchX);
 	        if(test>=50){
 	        Intent	tabs = new Intent(this, com.renaudbaivier.sounder.TabsActivity.class);
@@ -751,15 +784,42 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
                startActivityForResult(tPlayer,22);
            	return true;
            case R.id.settings_m:
+        	   keep_alive_thread=false;
+               mediaPlayer.reset();
+               mediaPlayer=new MediaPlayer();
         	   this.currentPlayList.clear();
+        	   this.reset();
         	   instance=0;
+        	   currentSong=0;
         	   break;
            	
         }
         return false;
    }
-	
-	
+	private void reset(){
+		setContentView(R.layout.player);
+		this.shuffle=false;
+		this.loop=false;
+	}
+	private void clean(){
+		this.mediaPlayer=null;
+		mediaPlayer=new MediaPlayer();
+		this.keep_alive_thread=false;
+		this.currentThread=null;
+		this.unSynchronizeSeekBar();
+		nbCorruptFile++;
+		if(this.currentPlayList.size()>nbCorruptFile){
+			
+		ff();
+		}else{
+			nbCorruptFile=0;
+			this.currentPlayList.clear();
+			instance=0;
+			currentSong=0;
+			this.reset();
+		}
+		Toast.makeText(this, getString(R.string.corrupt_file_error), Toast.LENGTH_SHORT).show();
+	}
 	public void refreshTacks(){
 		TextView tv = (TextView) findViewById(R.id.nb_track);
 		tv.setText(String.format("%d/%d", (this.currentSong+1),this.currentPlayList.size()));
