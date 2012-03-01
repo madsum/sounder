@@ -1,13 +1,17 @@
 package com.renaudbaivier.sounder;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
@@ -162,17 +166,30 @@ public class PlayerActivity extends MenuActivity implements Runnable {
   	editor.putString("album_song", value.getAlbum());
   	editor.putString("artist_song", value.getArtist());
   	editor.putString("filename_song", value.getFilePath());
+  	editor.putString("album_art_song", value.getAlbum_art());
   	  editor.commit();
   	}
 
   	
   	public Song getLastSongPreference(Activity activity,String namespace){
   	  SharedPreferences prefs = activity.getSharedPreferences(namespace,this.MODE_PRIVATE);
-  String titre=  prefs.getString("title_song", "N/A");
-  String album =	prefs.getString("album_song", "N/A");
-  String artist =	prefs.getString("artist_song", "N/A");
-  String filepath =	prefs.getString("filename_song", "N/A");
-  	Song lastSong=new Song(titre, album, artist, filepath);
+  	  
+  		String titre=  prefs.getString("title_song", "N/A");
+  	  String album =	prefs.getString("album_song", "N/A");
+  	  String artist =	prefs.getString("artist_song", "N/A");
+  	  String filepath =	prefs.getString("filename_song", "N/A");
+  	  String album_art_song =	prefs.getString("album_art_song", "0");
+  	Song lastSong;
+  	try {
+  		int i = Integer.parseInt(album_art_song);
+  		lastSong=new Song(titre, album, artist, filepath,album_art_song); 
+  		}
+  		catch (Exception e) {
+  			lastSong=new Song(titre, album, artist, filepath,"0");   
+  		}
+  	  	 
+  	  
+  
   	  return lastSong;
   	}
     public void testInstanceWithExtra(){
@@ -430,6 +447,19 @@ private void unSynchronizeSeekBar(){
     tv.setText(song.getArtist());
     tv =	(TextView) findViewById(R.id.track);
     tv.setText(song.getTitre());
+    
+    
+    
+    
+    //attention experimentation cover
+    Uri uri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), Long.valueOf(song.getAlbum_art()));
+    ContentResolver res = this.getContentResolver();
+    ImageView ivCover = (ImageView) findViewById(R.id.cover);
+    try {
+        ivCover.setImageBitmap(BitmapFactory.decodeStream(res.openInputStream(uri)));
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    }
     }
     
     // Pause du MP3
@@ -453,10 +483,17 @@ private void unSynchronizeSeekBar(){
     	if(this.currentPlayList.size()<=0){
     		Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
     	}else{
+    		if(shuffle){
+    			int random = (int)(Math.random() * this.currentPlayList.size());
+    			if(currentSong==random){random++;}
+    			currentSong=random;
+    		}else{
 currentSong--;
+    		
 if(currentSong<0){
 	currentSong=this.currentPlayList.size()-1;
 }
+    		}
 this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     	}
     }
@@ -468,10 +505,16 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     	if(this.currentPlayList.size()<=0){
     		Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
     	}else{
+    		if(shuffle){
+    			int random = (int)(Math.random() * this.currentPlayList.size());
+    			if(currentSong==random){random++;}
+    			currentSong=random;
+    		}else{
 currentSong++;
 if(currentSong>=this.currentPlayList.size()){
 	currentSong=0;
 }
+    		}
 this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     }
     }
@@ -481,10 +524,15 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     	if(this.currentPlayList.size()<=0){
     		Toast.makeText(this, getString(R.string.empty), Toast.LENGTH_SHORT).show();
     	}else{
+    		if(shuffle){
+    			int random = (int)(Math.random() * this.currentPlayList.size());
+    			if(currentSong==random){random++;}
+    			currentSong=random;
+    		}else{
 currentSong++;
 if(currentSong>=this.currentPlayList.size()){
 	currentSong=0;
-}
+}}
 this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
     }
     }
@@ -496,12 +544,65 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
         	loop_on.setVisibility(View.VISIBLE);
         	loop = true;
         	loop_t.startAnimation(loop_t_a);
+        	Toast.makeText(this, getString(R.string.loop_on), Toast.LENGTH_SHORT).show();
     	} else {
     		loop_off.setVisibility(View.VISIBLE);
         	loop_on.setVisibility(View.INVISIBLE);
         	loop = false;
+        	Toast.makeText(this, getString(R.string.loop_off), Toast.LENGTH_SHORT).show();
+    	}
+    	if(shuffle){
+    		this.shuffle();
     	}
     	mediaPlayer.setLooping(loop);
+    }
+    public void loop() {
+    	if (loop == false) {
+    		loop_off.setVisibility(View.INVISIBLE);
+        	loop_on.setVisibility(View.VISIBLE);
+        	loop = true;
+        	loop_t.startAnimation(loop_t_a);
+        	Toast.makeText(this, getString(R.string.loop_on), Toast.LENGTH_SHORT).show();
+    	} else {
+    		loop_off.setVisibility(View.VISIBLE);
+        	loop_on.setVisibility(View.INVISIBLE);
+        	loop = false;
+        	Toast.makeText(this, getString(R.string.loop_off), Toast.LENGTH_SHORT).show();
+    	}
+    	
+    	mediaPlayer.setLooping(loop);
+    }
+    
+    public void shuffle(){
+    	if (shuffle == false) {
+    		shuffle_off.setVisibility(View.INVISIBLE);
+    		shuffle_on.setVisibility(View.VISIBLE);
+    		shuffle = true;
+    		Toast.makeText(this, getString(R.string.sh_on), Toast.LENGTH_SHORT).show();
+    		shuffle_t.startAnimation(loop_t_a);
+    	} else {
+    		shuffle_off.setVisibility(View.VISIBLE);
+    		shuffle_on.setVisibility(View.INVISIBLE);
+    		shuffle = false;
+    		Toast.makeText(this, getString(R.string.sh_off), Toast.LENGTH_SHORT).show();
+    	}
+    }
+    public void shuffle(View v){
+    	if (shuffle == false) {
+    		shuffle_off.setVisibility(View.INVISIBLE);
+    		shuffle_on.setVisibility(View.VISIBLE);
+    		shuffle = true;
+    		Toast.makeText(this, getString(R.string.sh_on), Toast.LENGTH_SHORT).show();
+    		shuffle_t.startAnimation(loop_t_a);
+    	} else {
+    		shuffle_off.setVisibility(View.VISIBLE);
+    		shuffle_on.setVisibility(View.INVISIBLE);
+    		shuffle = false;
+    		Toast.makeText(this, getString(R.string.sh_off), Toast.LENGTH_SHORT).show();
+    	}
+    	if(loop){
+    		this.loop();
+    	}
     }
     
     // Utils

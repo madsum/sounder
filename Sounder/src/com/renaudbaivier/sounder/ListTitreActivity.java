@@ -1,10 +1,15 @@
 package com.renaudbaivier.sounder;
 
+import java.io.FileNotFoundException;
+
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -43,6 +48,7 @@ public class ListTitreActivity extends Activity
             				  MediaStore.Audio.Media.ARTIST,
             				  MediaStore.Audio.Media.ALBUM,
             				  MediaStore.Audio.Media.TITLE,
+            				  MediaStore.Audio.Albums.ALBUM_ID
             				 //MediaStore.Audio.Media.ALBUM_ART
             };
             musiccursor = managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,proj, null, null, null);
@@ -72,10 +78,11 @@ long id) {
                   String artist = musiccursor.getString(music_column_index);
                   music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
                   String filename = musiccursor.getString(music_column_index);
-                 // music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ART);
-                //  String albumArt = musiccursor.getString(music_column_index);
-                      
-                  Song song = new Song(title, album, artist, filename);
+                  music_column_index = musiccursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID);
+                  String albumArt = musiccursor.getString(music_column_index);
+                  
+                 
+                  Song song = new Song(title, album, artist, filename,albumArt);
             
                  // appelle de la methode d'ajout du player
                   Intent intent = new Intent(ctx,com.renaudbaivier.sounder.PlayerActivity.class);

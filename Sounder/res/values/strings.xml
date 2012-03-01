@@ -22,5 +22,9 @@
     <string name="clear">Vider la liste</string>
     <string name="exit">Exit</string>
     <string name="loop">Loop</string>
+    <string name="loop_on">Loop on </string>
+    <string name="loop_off">Loop off </string>
+    <string name="sh_on">Shuffle on </string>
+    <string name="sh_off">Shuffle off </string>
 
 </resources>
