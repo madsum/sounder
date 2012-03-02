@@ -3,7 +3,7 @@
 
     <string name="app_name">Sounder</string>
     <string name="sounder">Sounder</string>
-	<string name="liste">Liste</string>
+	<string name="liste">List</string>
 
     <!--  Player -->
     <string name="artist">Artist</string>
@@ -11,7 +11,7 @@
     <string name="track">Track</string>
     <string name="current">00:00</string>
     <string name="remaining">-00:00</string>
-    <string name="empty">aucune chanson dans la liste en cours</string>
+    <string name="empty">The current playlist is empty</string>
     <string name="nb_track">0/0</string>
     <string name="shuffle">Shuf</string>
     
@@ -19,7 +19,7 @@
     <string name="player">Player</string>
     <string name="search">Search</string>
     <string name="settings">Settings</string>
-    <string name="clear">Vider la liste</string>
+    <string name="clear">Clear the current list</string>
     <string name="exit">Exit</string>
     <string name="loop">Loop</string>
     <string name="loop_on">Loop on </string>
@@ -27,7 +27,7 @@
     <string name="sh_on">Shuffle on </string>
     <string name="sh_off">Shuffle off </string>
     <!-- Erreurs -->
-    <string  name="img_error">Impossible de charger l\'image</string>
-    <string  name="corrupt_file_error">Fichier corrompu</string>
+    <string  name="img_error">unable to load album cover</string>
+    <string  name="corrupt_file_error">unvalid file</string>
 
 </resources>
