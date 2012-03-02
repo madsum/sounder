@@ -853,6 +853,8 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
 		  }else{
 			  this.reset();
 		  }
+		  this.unSynchronizeSeekBar();
+		  this.synchronizeSeekBar();
 		  this.loadInformation();
 		  this.refreshTacks();
 		}
