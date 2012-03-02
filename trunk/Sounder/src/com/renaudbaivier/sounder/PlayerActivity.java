@@ -12,6 +12,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -843,4 +844,40 @@ this.stopAndPlay(this.currentPlayList.get(currentSong).getFilePath());
 		TextView tv = (TextView) findViewById(R.id.nb_track);
 		tv.setText(String.format("%d/%d", (this.currentSong+1),this.currentPlayList.size()));
 	}
+	
+	
+	public void onConfigurationChanged(Configuration newConfig) {
+		  super.onConfigurationChanged(newConfig);
+		  if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+		  this.resetLand();
+		  }else{
+			  this.reset();
+		  }
+		  this.loadInformation();
+		  this.refreshTacks();
+		}
+
+	private void resetLand() {
+setContentView(R.layout.playerland);
+		
+		play = (ImageView) findViewById(R.id.play);
+        pause = (ImageView) findViewById(R.id.pause);
+        artist = (TextView) findViewById(R.id.artist);
+        album = (TextView) findViewById(R.id.album);
+        track = (TextView) findViewById(R.id.track);
+        current = (TextView) findViewById(R.id.current);
+        remaining = (TextView) findViewById(R.id.remaining);
+        timeprogress = (SeekBar) findViewById(R.id.timeprogress);
+        loop_off = (ImageView) findViewById(R.id.loop_off);
+        loop_on = (ImageView) findViewById(R.id.loop_on);
+        loop = false;
+        loop_t = (TextView) findViewById(R.id.loop_t);
+        loop_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
+        shuffle_off = (ImageView) findViewById(R.id.shuffle_off);
+        shuffle_on = (ImageView) findViewById(R.id.shuffle_on);
+        shuffle = false;
+        shuffle_t = (TextView) findViewById(R.id.shuffle_t);
+        shuffle_t_a = AnimationUtils.loadAnimation(this, R.anim.translate);
+	}
+
 }
