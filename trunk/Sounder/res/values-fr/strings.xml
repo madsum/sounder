@@ -6,21 +6,21 @@
 	<string name="liste">Liste</string>
 
     <!--  Player -->
-    <string name="artist">Artist</string>
+    <string name="artist">Artiste</string>
     <string name="album">Album</string>
-    <string name="track">Track</string>
+    <string name="track">Piste</string>
     <string name="current">00:00</string>
     <string name="remaining">-00:00</string>
-    <string name="empty">aucune chanson dans la liste en cours</string>
+    <string name="empty">Aucune chanson dans la liste en cours</string>
     <string name="nb_track">0/0</string>
     <string name="shuffle">Shuf</string>
     
     <!-- Menu -->
-    <string name="player">Player</string>
-    <string name="search">Search</string>
+    <string name="player">Lecteur</string>
+    <string name="search">ajouter</string>
     <string name="settings">Settings</string>
     <string name="clear">Vider la liste</string>
-    <string name="exit">Exit</string>
+    <string name="exit">Quitter</string>
     <string name="loop">Loop</string>
     <string name="loop_on">Loop on </string>
     <string name="loop_off">Loop off </string>
